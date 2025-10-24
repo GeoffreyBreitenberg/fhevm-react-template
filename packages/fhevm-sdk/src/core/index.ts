@@ -1,6 +1,7 @@
-export * from "../internal/fhevm";
-export * from "../internal/RelayerSDKLoader";
-export * from "../internal/PublicKeyStorage";
-export * from "../internal/fhevmTypes";
-export * from "../internal/constants";
+/**
+ * Core FHEVM SDK functions
+ */
 
+export { createFhevmClient, ensureClientReady } from './client';
+export { encryptUint32, encryptUint64, batchEncrypt } from './encryption';
+export { userDecrypt, batchDecrypt } from './decryption';
