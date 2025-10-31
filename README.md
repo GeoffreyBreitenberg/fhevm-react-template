@@ -20,12 +20,19 @@ The Universal FHEVM SDK is a developer-friendly toolkit that simplifies building
 ### Key Features
 
 ✅ **Framework Agnostic** - Works with React, Next.js, Vue, Node.js
+
 ✅ **Unified Package** - Single dependency for all FHEVM needs
+
 ✅ **Wagmi-like API** - Familiar hooks and utilities
+
 ✅ **Quick Setup** - Less than 10 lines to start
+
 ✅ **TypeScript Ready** - Full type safety
+
 ✅ **Production Tested** - Real-world dApp examples
+
 ⚛️ **React 18 Ready** - Complete example with Vite, hooks, and components
+
 🔐 **Full SDK Integration** - All examples use @fhevm/sdk for encryption
 
 ---
