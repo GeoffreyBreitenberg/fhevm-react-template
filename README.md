@@ -15,6 +15,8 @@ The Universal FHEVM SDK is a developer-friendly toolkit that simplifies building
 
 **Live Example Application**: [https://fhe-copyright.vercel.app/](https://fhe-copyright.vercel.app/)
 
+**Video File**: `demo.mp4` (located in project root)
+
 ### Key Features
 
 ✅ **Framework Agnostic** - Works with React, Next.js, Vue, Node.js
