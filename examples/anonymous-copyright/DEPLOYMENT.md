@@ -52,7 +52,8 @@ Before deploying, ensure you have:
 ### 1. Clone and Navigate
 
 ```bash
-cd D:/zamadapp/dapp162
+# Navigate to the project directory
+cd fhevm-react-template/examples/anonymous-copyright
 ```
 
 ### 2. Install Dependencies
@@ -428,7 +429,7 @@ Etherscan Link: https://sepolia.etherscan.io/address/[CONTRACT_ADDRESS]
 ## Project Structure
 
 ```
-dapp162/
+anonymous-copyright/
 ├── contracts/
 │   └── AnonymousCopyright.sol    # Main smart contract
 ├── scripts/

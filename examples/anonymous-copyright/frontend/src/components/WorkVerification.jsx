@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { encryptContentHash } from '../utils/fhe';
 import './WorkVerification.css';
 
 function WorkVerification({ contract, account }) {
@@ -22,12 +23,18 @@ function WorkVerification({ contract, account }) {
 
     try {
       setLoading(true);
+      toast.loading('Encrypting content hash with FHE...', { id: 'verify' });
+
+      // Encrypt content hash using FHEVM SDK
+      const encrypted = await encryptContentHash(contentHash);
+
       toast.loading('Verifying work...', { id: 'verify' });
 
-      // Request verification
+      // Request verification with encrypted content hash
       const tx = await contract.requestVerifyWork(
         parseInt(workId),
-        parseInt(contentHash)
+        encrypted.handles[0],
+        encrypted.inputProof
       );
 
       toast.loading('Waiting for confirmation...', { id: 'verify' });
@@ -39,7 +46,7 @@ function WorkVerification({ contract, account }) {
       if (workInfo.verified) {
         toast.success('Work verified successfully!', { id: 'verify' });
       } else {
-        toast.error('Verification failed - content hash mismatch', { id: 'verify' });
+        toast.info('Verification request submitted. Check back later.', { id: 'verify' });
       }
 
       // Reset form

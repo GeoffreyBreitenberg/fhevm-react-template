@@ -8,7 +8,8 @@ import WorkRegistration from './components/WorkRegistration';
 import WorksList from './components/WorksList';
 import WorkVerification from './components/WorkVerification';
 import DisputeManagement from './components/DisputeManagement';
-import { getContract } from './utils/contract';
+import { getContract, CONTRACT_ADDRESS, NETWORK } from './utils/contract';
+import { initializeFHE, isFHEInitialized } from './utils/fhe';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
   const [contract, setContract] = useState(null);
   const [isAuthor, setIsAuthor] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [fheReady, setFheReady] = useState(false);
 
   // Connect wallet
   const connectWallet = async () => {
@@ -46,6 +48,23 @@ function App() {
       // Get contract instance
       const contractInstance = await getContract(web3Signer);
       setContract(contractInstance);
+
+      // Initialize FHE
+      if (!isFHEInitialized()) {
+        toast.loading('Initializing FHE encryption...', { id: 'fhe-init' });
+        try {
+          await initializeFHE(NETWORK, CONTRACT_ADDRESS);
+          setFheReady(true);
+          toast.success('FHE encryption ready', { id: 'fhe-init' });
+        } catch (fheError) {
+          console.error('FHE initialization failed:', fheError);
+          toast.error('FHE initialization failed', { id: 'fhe-init' });
+          // Continue anyway - FHE will be retried on first use
+          setFheReady(false);
+        }
+      } else {
+        setFheReady(true);
+      }
 
       // Check if user is registered author
       const registered = await contractInstance.isRegisteredAuthor(address);

@@ -1,430 +1,301 @@
-# Anonymous Copyright Protection System
+# 🔐 Anonymous Copyright Protection
 
-A production-ready dApp demonstrating FHEVM integration for anonymous copyright registration and management.
+A privacy-preserving blockchain platform for creative work authentication using Fully Homomorphic Encryption (FHE) on Ethereum Sepolia testnet.
 
-## 🎯 Overview
+## 🌟 Overview
 
-This example showcases a complete implementation of Fully Homomorphic Encryption (FHE) for protecting copyright while maintaining author anonymity. Built with Zama's FHEVM technology on Ethereum Sepolia.
+Anonymous Copyright Protection leverages **fhEVM** (Fully Homomorphic Encryption for Ethereum Virtual Machine) to enable creators to register and protect their original works without revealing sensitive information on-chain. All content hashes and author identities remain encrypted while still being verifiable and disputable.
 
-### Key Features
+## 🎯 Core Concept
 
-🔒 **Encrypted Content Hashes** - Content hashes stored with euint32 FHE encryption
-👤 **Anonymous Author IDs** - Author identities protected with euint64 encryption
-⚖️ **Dispute Management** - Copyright dispute resolution with encrypted proofs
-🛡️ **Access Control** - Owner-based permission system
-✅ **Production Ready** - 56+ tests, CI/CD, security auditing
+### Privacy-Preserving Original Work Authentication
 
----
+Traditional copyright registration systems expose creator identities and work details publicly. Our solution uses **Fully Homomorphic Encryption** to:
 
-## 🚀 Quick Start
+- **Encrypt Author Identity**: Register with a secret author ID that remains private on the blockchain
+- **Encrypt Content Hash**: Submit work fingerprints that are encrypted yet verifiable
+- **Private Verification**: Verify ownership without revealing the original hash
+- **Encrypted Disputes**: Challenge works with encrypted evidence
+- **Zero-Knowledge Proofs**: Prove ownership without exposing sensitive data
 
-### Prerequisites
+## 📋 Features
 
-- Node.js ≥ 18.0.0
-- npm ≥ 9.0.0
-- Sepolia ETH (for deployment)
+### 1. Anonymous Author Registration
+- Register with an encrypted numeric author ID
+- Identity remains private on-chain
+- One-time registration per address
 
-### Installation
+### 2. Encrypted Work Registration
+- Submit creative works with encrypted content hashes
+- Public metadata: title, category, timestamp
+- Private data: content hash, author ID (both encrypted)
+- Permanent on-chain record
 
-```bash
-# Navigate to example
-cd examples/anonymous-copyright
+### 3. Privacy-Preserving Verification
+- Verify work ownership without revealing original hash
+- Asynchronous FHE decryption process
+- Results emitted via blockchain events
 
-# Install dependencies
-npm install
+### 4. Dispute Resolution System
+- File disputes with encrypted evidence
+- Compare encrypted hashes on-chain
+- Transparent resolution process
 
-# Configure environment
-cp .env.example .env
-# Edit .env with your keys
-```
+### 5. Work Categories
+- Literature
+- Music
+- Art
+- Photography
+- Software
+- Design
+- Video
+- Other
 
-### Development
+## 🔗 Smart Contract
 
-```bash
-# Compile contracts
-npm run compile
+**Network**: Ethereum Sepolia Testnet
 
-# Run tests
-npm test
+**Contract Address**: `0xe2851b2B971E3F95f325764c25ffd52E9c8bf80a`
 
-# Check coverage
-npm run coverage
+**Technology Stack**:
+- Solidity 0.8.24
+- fhEVM by Zama
+- Fully Homomorphic Encryption
+- Ethereum Sepolia Network
 
-# Deploy to Sepolia
-npm run deploy
-```
+## 🎬 Demonstration
 
----
+### Live Demo
+🌐 **Website**: [https://anonymous-copyright.vercel.app/](https://anonymous-copyright.vercel.app/)
 
-## 📁 Project Structure
+### Video Demonstration
+📹 Watch our platform in action - see how creators can register their works with complete privacy while maintaining verifiable ownership on the blockchain.
 
-```
-anonymous-copyright/
-├── contracts/
-│   └── AnonymousCopyright.sol        # Main contract with FHEVM
-├── scripts/
-│   ├── deploy.js                     # Deployment script
-│   ├── verify.js                     # Etherscan verification
-│   ├── interact.js                   # Interaction examples
-│   └── simulate.js                   # Full simulation
-├── test/
-│   ├── AnonymousCopyright.test.js    # 56 test cases
-│   └── AnonymousCopyright.sepolia.test.js
-├── .github/workflows/                # CI/CD pipelines
-├── hardhat.config.js                 # Hardhat configuration
-└── package.json                      # Dependencies & scripts
-```
-
----
-
-## 📖 Smart Contract
-
-### Contract: AnonymousCopyright.sol
-
-**Location**: `contracts/AnonymousCopyright.sol`
-**Solidity**: 0.8.24
-**Libraries**: @fhevm/solidity
-
-### Core Functions
-
-#### 1. Author Registration
-
-```solidity
-function registerAuthor(uint64 _authorId) external
-```
-
-Registers user as author with encrypted ID.
-
-**Parameters**:
-- `_authorId`: Author's unique identifier (encrypted with euint64)
-
-**Events**: `AuthorRegistered(address indexed author, uint256 timestamp)`
-
-#### 2. Work Registration
-
-```solidity
-function registerWork(
-    uint32 _contentHash,
-    string calldata _title,
-    string calldata _category
-) external returns (uint256)
-```
-
-Registers original work with encrypted content hash.
-
-**Parameters**:
-- `_contentHash`: Content hash (encrypted with euint32)
-- `_title`: Work title (public)
-- `_category`: Work category (public)
-
-**Returns**: Work ID
-**Events**: `WorkRegistered(uint256 indexed workId, address indexed registrant, string title, uint256 timestamp)`
-
-#### 3. Dispute Filing
-
-```solidity
-function fileDispute(
-    uint256 _workId,
-    uint32 _challengerContentHash
-) external
-```
-
-Files copyright dispute with encrypted proof.
-
-**Parameters**:
-- `_workId`: Work to dispute
-- `_challengerContentHash`: Challenger's content hash (encrypted)
-
-**Events**: `DisputeFiled(uint256 indexed workId, address indexed challenger, uint256 disputeId)`
-
-#### 4. Work Verification
-
-```solidity
-function requestVerifyWork(
-    uint256 _workId,
-    uint32 _contentHashToVerify
-) external
-```
-
-Verifies work ownership using encrypted comparison.
-
-**Parameters**:
-- `_workId`: Work to verify
-- `_contentHashToVerify`: Hash to compare (encrypted)
-
----
-
-## 🧪 Testing
-
-### Test Suite: 56 Tests
-
-**Categories**:
-- Deployment & Initialization (5 tests)
-- Author Registration (8 tests)
-- Work Registration (10 tests)
-- Work Verification (7 tests)
-- Dispute Management (8 tests)
-- View Functions (4 tests)
-- Access Control (5 tests)
-- Edge Cases (6 tests)
-- Gas Optimization (3 tests)
-
-### Run Tests
-
-```bash
-# All tests
-npm test
-
-# Main suite only
-npm run test:main
-
-# With gas reporting
-npm run test:gas
-
-# Coverage report
-npm run coverage
-```
-
-### Expected Coverage
-
-- Statements: ≥ 85%
-- Branches: ≥ 75%
-- Functions: ≥ 90%
-- Lines: ≥ 85%
-
----
-
-## 🌐 Deployment
-
-### Deploy to Sepolia
-
-```bash
-# Configure .env first
-npm run deploy
-```
-
-### Verify on Etherscan
-
-```bash
-npm run verify
-```
-
-### Interact with Contract
-
-```bash
-# Run interaction examples
-npm run interact
-
-# Run full simulation
-npm run simulate
-```
-
----
-
-## 🔐 Security Features
-
-### Contract Security
-
-✅ Access control with `onlyOwner` modifier
-✅ Input validation on all functions
-✅ FHE encryption for sensitive data
-✅ Event logging for transparency
-✅ Reentrancy protection
-
-### Development Security
-
-✅ Pre-commit hooks (Husky)
-✅ Security audit script
-✅ Dependency vulnerability scanning
-✅ Solhint linting
-✅ Gas optimization
-
-### Run Security Audit
-
-```bash
-npm run security
-```
-
----
-
-## ⚡ Performance
-
-### Gas Costs
-
-| Function | Gas Used | Status |
-|----------|----------|--------|
-| registerAuthor | ~187,000 | ✅ Optimized |
-| registerWork | ~257,000 | ✅ Optimized |
-| fileDispute | ~205,000 | ✅ Optimized |
-| markWorkAsVerified | ~47,000 | ✅ Optimized |
-
-### Gas Analysis
-
-```bash
-npm run gas:analysis
-```
-
----
-
-## 📚 Available Scripts
-
-### Development
-
-```bash
-npm run compile          # Compile contracts
-npm run clean            # Clean artifacts
-npm test                 # Run all tests
-npm run coverage         # Generate coverage
-```
-
-### Deployment
-
-```bash
-npm run deploy           # Deploy to Sepolia
-npm run deploy:local     # Deploy to localhost
-npm run verify           # Verify on Etherscan
-npm run interact         # Interact with deployed contract
-npm run simulate         # Run full simulation
-```
-
-### Code Quality
-
-```bash
-npm run lint             # Lint Solidity + JavaScript
-npm run lint:sol         # Lint Solidity only
-npm run lint:js          # Lint JavaScript only
-npm run format           # Format all code
-npm run prettier:check   # Check formatting
-```
-
-### Security
-
-```bash
-npm run security         # Full security audit
-npm run security:audit   # Run audit script
-npm run security:check   # npm audit
-```
-
-### Performance
-
-```bash
-npm run gas              # Gas analysis + reporting
-npm run gas:analysis     # Gas analysis only
-npm run test:gas         # Tests with gas reporting
-```
-
-### CI/CD
-
-```bash
-npm run ci               # Standard CI pipeline
-npm run ci:full          # Complete validation
-```
-
----
+### On-Chain Transactions
+All transactions are recorded on Ethereum Sepolia testnet. You can verify any transaction using:
+- **Sepolia Etherscan**: [https://sepolia.etherscan.io/](https://sepolia.etherscan.io/)
+- Search for contract: `0xe2851b2B971E3F95f325764c25ffd52E9c8bf80a`
 
 ## 🏗️ Architecture
 
-### Data Flow
-
-```
-1. User Registration
-   User → registerAuthor(encryptedID) → Contract
-
-2. Work Registration
-   User → registerWork(encryptedHash, title, category) → Contract
-
-3. Verification
-   User → requestVerifyWork(workId, encryptedHash) → Contract
-   Contract → FHE Comparison → Result
-
-4. Dispute
-   Challenger → fileDispute(workId, encryptedProof) → Contract
-```
-
-### FHE Integration
+### Smart Contract Structure
 
 ```solidity
-// Encrypt author ID
-euint64 encryptedAuthorId = FHE.asEuint64(_authorId);
+contract AnonymousCopyright {
+    // Encrypted data structures
+    struct OriginalWork {
+        euint32 encryptedContentHash;  // FHE encrypted hash
+        euint64 encryptedAuthorId;     // FHE encrypted ID
+        address registrant;
+        uint256 timestamp;
+        bool verified;
+        bool disputed;
+        string workTitle;
+        string category;
+    }
 
-// Encrypt content hash
-euint32 encryptedContentHash = FHE.asEuint32(_contentHash);
-
-// Encrypted comparison
-ebool isMatch = FHE.eq(work.encryptedContentHash, providedHash);
-
-// Request decryption
-FHE.requestDecryption(cts, callback);
+    struct AuthorProfile {
+        euint64 encryptedAuthorId;     // Private identity
+        bool registered;
+        uint256 workCount;
+        uint256 totalDisputes;
+        uint256 wonDisputes;
+    }
+}
 ```
 
----
+### Key Functions
 
-## 📊 Example Usage
+1. **registerAuthor(uint64 _authorId)**
+   - Encrypts and stores author identity
+   - Enables work registration
 
-### Register as Author
+2. **registerWork(uint32 _contentHash, string _title, string _category)**
+   - Encrypts content hash
+   - Links to encrypted author ID
+   - Returns unique work ID
 
-```javascript
-const authorId = 123456;
-const tx = await contract.registerAuthor(authorId);
-await tx.wait();
+3. **requestVerifyWork(uint256 _workId, uint32 _contentHashToVerify)**
+   - Initiates encrypted comparison
+   - Async decryption via fhEVM gateway
+   - Results via VerificationResult event
+
+4. **fileDispute(uint256 _workId, uint32 _challengerContentHash)**
+   - Submit encrypted challenge
+   - Transparent dispute record
+
+5. **resolveDispute(uint256 _workId, uint256 _disputeId)**
+   - Compare encrypted hashes
+   - Determine rightful owner
+
+## 🎨 User Interface
+
+### Modern React Web3 Design
+- **Framework**: React 18 with component-based architecture
+- **Build Tool**: Vite for fast development and optimized builds
+- **Theme**: Purple/Pink gradient with dark mode aesthetics
+- **Responsive**: Mobile-first design with CSS Grid/Flexbox
+- **Web3 Integration**: MetaMask connectivity with ethers v6
+- **Real-time Updates**: Live blockchain interaction with React state
+- **User Feedback**: Toast notifications for all operations
+- **Modular Components**: 7 reusable React components
+
+### React Component Structure
+```
+frontend/src/
+├── App.jsx                    # Main app with wallet management
+├── main.jsx                   # React DOM entry point
+├── components/
+│   ├── Header.jsx            # Navigation & account display
+│   ├── ConnectWallet.jsx     # Wallet connection button
+│   ├── AuthorRegistration.jsx # FHE author registration form
+│   ├── WorkRegistration.jsx  # Work submission with SDK encryption
+│   ├── WorkVerification.jsx  # Ownership verification interface
+│   ├── DisputeManagement.jsx # Dispute filing & resolution
+│   └── WorksList.jsx         # Display registered works
+├── utils/
+│   ├── fhe.js               # FHEVM SDK integration layer
+│   └── contract.js          # Contract utilities & network config
+└── [component].css          # Component-scoped styles
 ```
 
-### Register Work
+### Interface Sections
+1. **Connect Wallet** - MetaMask integration with network detection
+2. **Register Author** - One-time FHE-encrypted identity setup
+3. **Submit Work** - Register copyrighted content with encrypted hash
+4. **Verify Work** - Check ownership claims via FHE comparison
+5. **File Dispute** - Challenge registrations with encrypted proof
+6. **Browse Works** - Explore all registered works with metadata
+7. **Dashboard** - Personal statistics and portfolio overview
 
-```javascript
-const contentHash = 987654321;
-const tx = await contract.registerWork(
-  contentHash,
-  "My Original Work",
-  "Digital Art"
-);
-const receipt = await tx.wait();
-const workId = receipt.logs[0].args.workId;
-```
+## 🔒 Privacy Features
 
-### File Dispute
+### What's Encrypted (On-Chain)
+- ✅ Author ID (euint64)
+- ✅ Content Hash (euint32)
+- ✅ Verification comparisons
+- ✅ Dispute evidence
 
-```javascript
-const challengerHash = 111222333;
-const tx = await contract.fileDispute(workId, challengerHash);
-await tx.wait();
-```
+### What's Public (On-Chain)
+- ✅ Work title
+- ✅ Category
+- ✅ Timestamp
+- ✅ Registrant address
+- ✅ Dispute count
+- ✅ Verification status
 
-### Get Work Info
+### FHE Technology
+Powered by **Zama's fhEVM**, enabling:
+- Computation on encrypted data
+- No decryption required for verification
+- Privacy-preserving smart contracts
+- Secure multi-party computation
 
-```javascript
-const workInfo = await contract.getWorkInfo(workId);
-console.log(workInfo.title);        // "My Original Work"
-console.log(workInfo.category);     // "Digital Art"
-console.log(workInfo.registrant);   // 0x...
-console.log(workInfo.verified);     // false
-console.log(workInfo.disputed);     // false
-```
+## 📊 Use Cases
 
----
+### 1. Anonymous Authors
+Writers can register their manuscripts without revealing their identity, protecting against plagiarism while maintaining anonymity.
 
-## 🔗 Documentation
+### 2. Whistleblower Protection
+Journalists can timestamp sensitive documents with verifiable proof of possession without exposing themselves.
 
-- [Main README](../../README.md) - SDK overview
-- [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide
-- [TESTING.md](./TESTING.md) - Testing documentation
-- [SECURITY.md](./SECURITY.md) - Security guide
-- [CI_CD.md](./CI_CD.md) - CI/CD documentation
+### 3. Trade Secrets
+Companies can register proprietary algorithms or designs with encrypted fingerprints, proving prior art without disclosure.
 
----
+### 4. Creative Commons
+Artists can register works under pseudonyms while maintaining verifiable ownership for licensing.
 
-## 🤝 Contributing
+### 5. Academic Research
+Researchers can timestamp discoveries before publication, protecting priority without premature disclosure.
 
-See main [Contributing Guide](../../CONTRIBUTING.md)
+## 🌐 Links
 
----
+- **GitHub Repository**: [https://github.com/GeoffreyBreitenberg/AnonymousCopyright](https://github.com/GeoffreyBreitenberg/AnonymousCopyright)
+- **Live Application**: [https://anonymous-copyright.vercel.app/](https://anonymous-copyright.vercel.app/)
+- **Contract on Sepolia**: [View on Etherscan](https://sepolia.etherscan.io/address/0xe2851b2B971E3F95f325764c25ffd52E9c8bf80a)
+
+## 🛠️ Technology Stack
+
+### Blockchain
+- **Network**: Ethereum Sepolia Testnet
+- **Smart Contract**: Solidity 0.8.24
+- **FHE Library**: @fhevm/solidity by Zama
+- **Development**: Hardhat
+
+### Frontend
+- **Framework**: React 18.2.0 with modern hooks (useState, useEffect)
+- **Build Tool**: Vite 5.0.8 (fast HMR, optimized production builds)
+- **Web3 Library**: ethers.js v6.9.0 (BrowserProvider, Contract)
+- **FHE Integration**: @fhevm/sdk (local package) - encryptUint32, encryptUint64
+- **UI/UX**: react-hot-toast 2.4.1 for real-time notifications
+- **Styling**: Custom CSS with gradient themes, responsive design
+- **Component Architecture**: 7 modular, reusable React components
+- **Development Tools**: ESLint, Prettier, Vitest for testing
+- **Hosting**: Vercel (production deployment)
+
+### Encryption
+- **FHE Provider**: Zama fhEVM
+- **Encrypted Types**: euint32, euint64, ebool
+- **Decryption**: Asynchronous gateway-based
+
+## 📈 Platform Statistics
+
+Track real-time metrics:
+- Total works registered
+- Active authors
+- Disputes filed
+- Verification requests
+- Category distribution
+
+## 🔐 Security Considerations
+
+### Smart Contract Security
+- Owner-only functions for verification
+- Reentrancy protection
+- Input validation
+- Event logging for transparency
+
+### Privacy Guarantees
+- Content hashes never decrypted publicly
+- Author IDs remain encrypted
+- Verification via zero-knowledge proofs
+- Dispute resolution without data exposure
+
+### Best Practices
+1. Use unique, high-entropy author IDs
+2. Generate cryptographic content hashes
+3. Store original works offline securely
+4. Verify transactions on Etherscan
+5. Keep private keys secure
+
+## 🎯 Roadmap
+
+- ✅ Core FHE copyright registration
+- ✅ Encrypted verification system
+- ✅ Dispute mechanism
+- ✅ Web3 frontend interface
+- 🔄 IPFS integration for work storage
+- 🔄 Multi-chain deployment
+- 🔄 NFT minting for verified works
+- 🔄 DAO governance for disputes
+- 🔄 Mobile application
 
 ## 📄 License
 
-MIT License - see [LICENSE](../../LICENSE)
+MIT License - Open source and free to use
+
+## 🤝 Contributing
+
+We welcome contributions! This project demonstrates the power of FHE in protecting intellectual property rights while maintaining blockchain transparency.
+
+## 📞 Support
+
+For questions, issues, or collaboration:
+- **GitHub Issues**: [Report bugs or request features](https://github.com/GeoffreyBreitenberg/AnonymousCopyright/issues)
+- **Discussions**: Share ideas and use cases
 
 ---
 
-**Part of the Universal FHEVM SDK Project**
+**Powered by fhEVM** - Bringing privacy to smart contracts through Fully Homomorphic Encryption
 
-Built with ❤️ for the FHEVM community
+*Protecting creativity, preserving privacy, proving ownership.*

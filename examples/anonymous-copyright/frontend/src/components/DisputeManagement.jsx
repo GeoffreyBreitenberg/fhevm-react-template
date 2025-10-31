@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { encryptContentHash } from '../utils/fhe';
 import './DisputeManagement.css';
 
 function DisputeManagement({ contract, account }) {
@@ -22,12 +23,18 @@ function DisputeManagement({ contract, account }) {
 
     try {
       setLoading(true);
+      toast.loading('Encrypting proof with FHE...', { id: 'dispute' });
+
+      // Encrypt challenger's content hash using FHEVM SDK
+      const encrypted = await encryptContentHash(challengerHash);
+
       toast.loading('Filing dispute...', { id: 'dispute' });
 
       // File dispute with encrypted proof
       const tx = await contract.fileDispute(
         parseInt(workId),
-        parseInt(challengerHash)
+        encrypted.handles[0],
+        encrypted.inputProof
       );
 
       toast.loading('Waiting for confirmation...', { id: 'dispute' });

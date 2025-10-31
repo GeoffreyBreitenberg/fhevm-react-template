@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { encryptAuthorId } from '../utils/fhe';
 import './AuthorRegistration.css';
 
 function AuthorRegistration({ contract, account, onRegistered }) {
@@ -16,10 +17,19 @@ function AuthorRegistration({ contract, account, onRegistered }) {
 
     try {
       setLoading(true);
+      toast.loading('Encrypting author ID with FHE...', { id: 'register' });
+
+      // Encrypt author ID using FHEVM SDK
+      const encrypted = await encryptAuthorId(authorId);
+
       toast.loading('Registering as author...', { id: 'register' });
 
       // Register author with encrypted ID
-      const tx = await contract.registerAuthor(parseInt(authorId));
+      // The encrypted value contains handles array and inputProof
+      const tx = await contract.registerAuthor(
+        encrypted.handles[0],
+        encrypted.inputProof
+      );
 
       toast.loading('Waiting for confirmation...', { id: 'register' });
       await tx.wait();

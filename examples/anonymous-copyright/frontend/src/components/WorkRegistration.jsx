@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { toast } from 'react-hot-toast';
+import { encryptContentHash } from '../utils/fhe';
 import './WorkRegistration.css';
 
 function WorkRegistration({ contract, account }) {
@@ -32,11 +33,17 @@ function WorkRegistration({ contract, account }) {
 
     try {
       setLoading(true);
+      toast.loading('Encrypting content hash with FHE...', { id: 'register-work' });
+
+      // Encrypt content hash using FHEVM SDK
+      const encrypted = await encryptContentHash(formData.contentHash);
+
       toast.loading('Registering work...', { id: 'register-work' });
 
       // Register work with encrypted content hash
       const tx = await contract.registerWork(
-        parseInt(formData.contentHash),
+        encrypted.handles[0],
+        encrypted.inputProof,
         formData.title,
         formData.category
       );
